@@ -1,9 +1,16 @@
 import { useState } from "react";
-import { Home, TrendingUp, Lightbulb, Book, Plus, Bell, User } from "lucide-react";
+import { Home, TrendingUp, Lightbulb, Book, Plus, Bell, User, LogOut } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 import AssetsOverview from "@/components/dashboard/AssetsOverview";
 import AssetDetailCards from "@/components/dashboard/AssetDetailCards";
 import TodayOpportunities from "@/components/dashboard/TodayOpportunities";
@@ -13,15 +20,26 @@ import AddActionDialog from "@/components/dashboard/AddActionDialog";
 const Dashboard = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const { signOut, user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background flex flex-col" dir="rtl">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-gradient-hero shadow-md">
         <div className="flex items-center justify-between p-4">
-          <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary-light/20">
-            <User className="h-6 w-6" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary-light/20">
+                <User className="h-6 w-6" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem onClick={signOut} className="text-destructive">
+                <LogOut className="ml-2 h-4 w-4" />
+                تسجيل الخروج
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           
           <div className="text-center">
             <h1 className="text-xl font-bold text-primary-foreground">محفظتي الأخروية</h1>
