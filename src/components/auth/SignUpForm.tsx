@@ -127,7 +127,7 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
         onSuccess={onSuccess}
         userData={{
           full_name: fullName,
-          age: ageNum,
+          age: parseInt(age),
           gender: gender,
         }}
       />
