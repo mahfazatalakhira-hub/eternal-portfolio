@@ -80,12 +80,12 @@ export const useTotalAssets = () => {
       if (!user) throw new Error('User not authenticated');
 
       const { data, error } = await supabase
-        .rpc('get_user_total_assets', { p_user_id: user.id });
+        .rpc('get_user_total_assets', { p_user_id: user.id }) as { data: TotalAssets[] | null, error: any };
 
       if (error) throw error;
       
       // إرجاع القيمة الأولى من المصفوفة
-      const totals = data[0] || {
+      const totals = (data && data[0]) || {
         total_houses: 0,
         total_trees: 0,
         total_continuous: 0,
@@ -156,10 +156,10 @@ export const useUpsertAsset = () => {
 
       if (existingAsset) {
         // تحديث الأصل الموجود
-        const newValue = existingAsset.value + value;
+        const newValue = (existingAsset.value || 0) + value;
         const { data, error } = await supabase
           .from('user_assets')
-          .update({ value: newValue, notes })
+          .update({ value: newValue, notes: notes || '' })
           .eq('id', existingAsset.id)
           .select()
           .single();
@@ -172,8 +172,8 @@ export const useUpsertAsset = () => {
           asset_id: assetId,
           action_type: 'update',
           value: value,
-          notes,
-        });
+          notes: notes || '',
+        } as any);
 
         return data;
       } else {
@@ -186,8 +186,8 @@ export const useUpsertAsset = () => {
             asset_type: assetType,
             category: category,
             value: value,
-            notes,
-          })
+            notes: notes || '',
+          } as any)
           .select()
           .single();
 
@@ -199,8 +199,8 @@ export const useUpsertAsset = () => {
           asset_id: assetId,
           action_type: 'add',
           value: value,
-          notes,
-        });
+          notes: notes || '',
+        } as any);
 
         return data;
       }
