@@ -10,9 +10,14 @@ interface OTPVerificationProps {
   email: string;
   type: "signin" | "signup";
   onSuccess: () => void;
+  userData?: {
+    full_name: string;
+    age: number;
+    gender: string;
+  };
 }
 
-const OTPVerification = ({ email, type, onSuccess }: OTPVerificationProps) => {
+const OTPVerification = ({ email, type, onSuccess, userData }: OTPVerificationProps) => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -59,6 +64,32 @@ const OTPVerification = ({ email, type, onSuccess }: OTPVerificationProps) => {
           });
         }
         return;
+      }
+
+      // بعد التحقق الناجح، إنشاء profile للمستخدم الجديد (في حالة signup)
+      if (type === "signup" && userData) {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          
+          if (user) {
+            const { error: profileError } = await supabase
+              .from('user_profiles')
+              .insert({
+                id: user.id,
+                full_name: userData.full_name,
+                age: userData.age,
+                gender: userData.gender,
+              });
+
+            if (profileError) {
+              console.error('Profile creation error:', profileError);
+              // لا نوقف العملية - يمكن إنشاء profile لاحقاً
+            }
+          }
+        } catch (profileErr) {
+          console.error('Profile creation exception:', profileErr);
+          // لا نوقف العملية
+        }
       }
 
       toast({

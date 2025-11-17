@@ -56,7 +56,7 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -70,31 +70,48 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
       });
 
       if (error) {
-        if (error.message.includes("already registered")) {
-          toast({
-            title: "خطأ",
-            description: "هذا البريد الإلكتروني مسجل بالفعل",
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "خطأ",
-            description: error.message,
-            variant: "destructive",
-          });
+        // معالجة أنواع الأخطاء المختلفة
+        let errorMessage = error.message;
+        
+        if (error.message.includes("already registered") || error.message.includes("already exists")) {
+          errorMessage = "هذا البريد الإلكتروني مسجل بالفعل";
+        } else if (error.message.includes("Invalid email")) {
+          errorMessage = "البريد الإلكتروني غير صحيح";
+        } else if (error.message.includes("Password")) {
+          errorMessage = "كلمة المرور غير صحيحة";
+        } else if (error.status === 500 || error.message.includes("500")) {
+          errorMessage = "خطأ في الخادم. يرجى المحاولة مرة أخرى أو التواصل مع الدعم";
+        } else if (error.message.includes("rate limit") || error.message.includes("too many")) {
+          errorMessage = "تم تجاوز عدد المحاولات المسموح. يرجى الانتظار قليلاً";
         }
+        
+        toast({
+          title: "خطأ في التسجيل",
+          description: errorMessage,
+          variant: "destructive",
+        });
         return;
       }
 
-      setShowOTP(true);
-      toast({
-        title: "تم الإرسال!",
-        description: "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
-      });
+      // التحقق من نجاح العملية
+      if (data?.user) {
+        setShowOTP(true);
+        toast({
+          title: "تم الإرسال!",
+          description: "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
+        });
+      } else {
+        toast({
+          title: "تحذير",
+          description: "لم يتم إنشاء الحساب. يرجى المحاولة مرة أخرى",
+          variant: "destructive",
+        });
+      }
     } catch (error: any) {
+      console.error("Signup error:", error);
       toast({
-        title: "خطأ",
-        description: "حدث خطأ أثناء إنشاء الحساب",
+        title: "خطأ غير متوقع",
+        description: error?.message || "حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى",
         variant: "destructive",
       });
     } finally {
@@ -103,7 +120,18 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
   };
 
   if (showOTP) {
-    return <OTPVerification email={email} type="signup" onSuccess={onSuccess} />;
+    return (
+      <OTPVerification 
+        email={email} 
+        type="signup" 
+        onSuccess={onSuccess}
+        userData={{
+          full_name: fullName,
+          age: ageNum,
+          gender: gender,
+        }}
+      />
+    );
   }
 
   return (
