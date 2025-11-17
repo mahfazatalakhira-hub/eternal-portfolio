@@ -1,0 +1,64 @@
+# Netlify Configuration for محفظة الآخرة
+
+[build]
+  # أمر البناء
+  command = "npm run build"
+  
+  # مجلد النشر
+  publish = "dist"
+  
+  # متغيرات البيئة للبناء
+  [build.environment]
+    NODE_VERSION = "18"
+
+# إعادة التوجيه للتعامل مع React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# رؤوس الأمان والأداء
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security Headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Performance Headers
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    # تخزين مؤقت طويل للأصول الثابتة
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+
+# إعدادات المعاينة
+[context.deploy-preview]
+  command = "npm run build"
+
+# إعدادات التطوير
+[context.branch-deploy]
+  command = "npm run build"
+
+# إعدادات الإنتاج
+[context.production]
+  command = "npm run build"
+  
+  # متغيرات البيئة للإنتاج
+  [context.production.environment]
+    NODE_ENV = "production"
+

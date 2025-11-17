@@ -17,7 +17,7 @@ const Auth = () => {
           <div className="w-16 h-16 rounded-full bg-gradient-primary mx-auto mb-4 flex items-center justify-center">
             <Sparkles className="h-8 w-8 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">محفظتي الأخروية</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-2">محفظة الآخرة</h1>
           <p className="text-sm text-muted-foreground">ابدأ رحلتك الاستثمارية للآخرة</p>
         </div>
 

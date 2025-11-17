@@ -46,7 +46,7 @@ const Dashboard = () => {
           </DropdownMenu>
           
           <div className="text-center">
-            <h1 className="text-xl font-bold text-primary-foreground">محفظتي الأخروية</h1>
+            <h1 className="text-xl font-bold text-primary-foreground">محفظة الآخرة</h1>
             <p className="text-xs text-primary-foreground/80">استثمر في آخرتك</p>
           </div>
           

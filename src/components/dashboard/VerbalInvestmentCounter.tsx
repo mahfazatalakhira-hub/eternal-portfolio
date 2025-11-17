@@ -12,12 +12,24 @@ interface VerbalInvestmentCounterProps {
 }
 
 const VerbalInvestmentCounter = ({ assetLabel, onComplete, isPending }: VerbalInvestmentCounterProps) => {
-  const [count, setCount] = useState(0);
+  // مفتاح localStorage خاص لقراءة الإخلاص
+  const storageKey = 'eternal-portfolio-counter-house-ikhlas';
+  
+  // تحميل الحالة المحفوظة من localStorage
+  const [count, setCount] = useState(() => {
+    const saved = localStorage.getItem(storageKey);
+    return saved ? parseInt(saved) : 0;
+  });
   const [houses, setHouses] = useState(0);
   const [showCelebration, setShowCelebration] = useState(false);
 
   const READS_PER_HOUSE = 10;
   const progress = (count % READS_PER_HOUSE) / READS_PER_HOUSE * 100;
+
+  // حفظ الحالة في localStorage عند كل تغيير
+  useEffect(() => {
+    localStorage.setItem(storageKey, count.toString());
+  }, [count, storageKey]);
 
   useEffect(() => {
     // حساب عدد البيوت
@@ -36,6 +48,10 @@ const VerbalInvestmentCounter = ({ assetLabel, onComplete, isPending }: VerbalIn
   const handleSave = () => {
     if (houses > 0) {
       onComplete(houses);
+      // حذف الحالة المحفوظة بعد الحفظ في قاعدة البيانات
+      localStorage.removeItem(storageKey);
+      setCount(0);
+      setHouses(0);
     }
   };
 

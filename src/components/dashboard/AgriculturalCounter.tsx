@@ -22,11 +22,23 @@ const AgriculturalCounter = ({
   onComplete, 
   isPending 
 }: AgriculturalCounterProps) => {
-  const [count, setCount] = useState(0);
+  // مفتاح localStorage خاص بكل أصل
+  const storageKey = `eternal-portfolio-counter-${assetId}`;
+  
+  // تحميل الحالة المحفوظة من localStorage
+  const [count, setCount] = useState(() => {
+    const saved = localStorage.getItem(storageKey);
+    return saved ? parseInt(saved) : 0;
+  });
   const [trees, setTrees] = useState(0);
   const [showCelebration, setShowCelebration] = useState(false);
 
   const progress = perItem > 1 ? ((count % perItem) / perItem * 100) : 0;
+
+  // حفظ الحالة في localStorage عند كل تغيير
+  useEffect(() => {
+    localStorage.setItem(storageKey, count.toString());
+  }, [count, storageKey]);
 
   useEffect(() => {
     // حساب عدد الأشجار/النخيل
@@ -45,6 +57,10 @@ const AgriculturalCounter = ({
   const handleSave = () => {
     if (trees > 0) {
       onComplete(trees);
+      // حذف الحالة المحفوظة بعد الحفظ في قاعدة البيانات
+      localStorage.removeItem(storageKey);
+      setCount(0);
+      setTrees(0);
     }
   };
 
