@@ -11,7 +11,7 @@ const Auth = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4" dir="rtl">
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-6 shadow-glow">
         <div className="text-center mb-6">
           <div className="w-16 h-16 rounded-full bg-gradient-primary mx-auto mb-4 flex items-center justify-center">

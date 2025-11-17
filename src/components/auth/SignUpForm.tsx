@@ -179,7 +179,7 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
       </div>
 
       <Button type="submit" className="w-full bg-primary hover:bg-primary-light" disabled={loading}>
-        {loading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         إنشاء حساب
       </Button>
     </form>
