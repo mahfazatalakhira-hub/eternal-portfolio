@@ -88,21 +88,21 @@ const AllAssets = () => {
         </div>
 
         {/* شريط البحث والفلترة */}
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="ابحث عن أصل معين..."
+              placeholder="ابحث..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pr-10"
+              className="pr-10 text-sm"
             />
           </div>
           
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="px-4 py-2 rounded-md border border-input bg-background text-sm"
+            className="px-3 py-2 rounded-md border border-input bg-background text-xs sm:text-sm"
           >
             <option value="all">جميع الأنواع</option>
             {investmentTypes.map((type) => (
@@ -144,18 +144,22 @@ const AllAssets = () => {
 
       {/* تبويبات الفئات */}
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 h-auto">
-          <TabsTrigger value="all" className="text-xs">
-            الكل
+        <TabsList className="grid w-full grid-cols-4 h-auto gap-1 p-1">
+          <TabsTrigger value="all" className="text-[10px] sm:text-xs px-1 py-2">
+            <span className="hidden sm:inline">الكل</span>
+            <span className="sm:hidden">📦</span>
           </TabsTrigger>
-          <TabsTrigger value="real-estate" className="text-xs">
-            🏠 العقارات
+          <TabsTrigger value="real-estate" className="text-[10px] sm:text-xs px-1 py-2">
+            <span className="hidden sm:inline">🏠 العقارات</span>
+            <span className="sm:hidden">🏠</span>
           </TabsTrigger>
-          <TabsTrigger value="agricultural" className="text-xs">
-            🌱 الزراعية
+          <TabsTrigger value="agricultural" className="text-[10px] sm:text-xs px-1 py-2">
+            <span className="hidden sm:inline">🌱 الزراعية</span>
+            <span className="sm:hidden">🌱</span>
           </TabsTrigger>
-          <TabsTrigger value="others" className="text-xs">
-            💫 أخرى
+          <TabsTrigger value="others" className="text-[10px] sm:text-xs px-1 py-2">
+            <span className="hidden sm:inline">💫 أخرى</span>
+            <span className="sm:hidden">💫</span>
           </TabsTrigger>
         </TabsList>
 
@@ -184,7 +188,7 @@ const AllAssets = () => {
                 </div>
 
                 {/* الأصول */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3">
                   {filteredItems.map((asset) => {
                     const TypeIcon = typeIcons[asset.type];
                     const userValue = getAssetValue(asset.id);
@@ -192,10 +196,10 @@ const AllAssets = () => {
                     return (
                       <Card
                         key={asset.id}
-                        className="p-4 hover:shadow-lg transition-all cursor-pointer border-2 hover:border-primary"
+                        className="p-3 sm:p-4 hover:shadow-lg transition-all cursor-pointer border-2 hover:border-primary active:scale-98"
                         onClick={() => handleAssetClick(asset)}
                       >
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                           {/* العنوان والقيمة */}
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1 text-right">

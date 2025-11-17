@@ -35,6 +35,15 @@ interface TotalAssets {
   total_social: number;
 }
 
+// واجهة الإحصائيات التفصيلية
+interface DetailedStats {
+  jihad_equivalent: number; // السعي على الأرامل (أجر المجاهد)
+  prophet_proximity: number; // كفالة اليتيم (مرافقة النبي)
+  needs_fulfilled: number; // قضاء حوائج الناس
+  continuous_charity: number; // الصدقات الجارية
+  inherited_mushaf: number; // المصاحف الموروثة
+}
+
 /**
  * Hook لجلب أصول المستخدم
  */
@@ -254,6 +263,41 @@ export const useActionRecords = (days: number = 7) => {
 
       if (error) throw error;
       return data as ActionRecord[];
+    },
+    enabled: !!user,
+  });
+};
+
+/**
+ * Hook للحصول على الإحصائيات التفصيلية المجتمعية
+ */
+export const useDetailedStats = () => {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ['detailed-stats', user?.id],
+    queryFn: async () => {
+      if (!user) throw new Error('User not authenticated');
+
+      const { data, error } = await supabase
+        .from('user_assets')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      const assets = data as UserAsset[];
+      
+      // حساب الإحصائيات التفصيلية
+      const stats: DetailedStats = {
+        jihad_equivalent: assets.find(a => a.asset_id === 'saaee-armala')?.value || 0,
+        prophet_proximity: assets.find(a => a.asset_id === 'kafil-yateem-asset')?.value || 0,
+        needs_fulfilled: assets.find(a => a.asset_id === 'qadaa-haajat')?.value || 0,
+        continuous_charity: assets.find(a => a.asset_id === 'sadaqa-jariya')?.value || 0,
+        inherited_mushaf: assets.find(a => a.asset_id === 'warratha-mushaf')?.value || 0,
+      };
+
+      return stats;
     },
     enabled: !!user,
   });

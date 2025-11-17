@@ -124,7 +124,7 @@ const Dashboard = () => {
       {/* Floating Action Button */}
       <Button
         size="lg"
-        className="fixed bottom-20 right-1/2 translate-x-1/2 z-40 h-14 w-14 rounded-full shadow-lg bg-secondary hover:bg-secondary-light text-secondary-foreground"
+        className="fixed bottom-20 left-1/2 -translate-x-1/2 z-40 h-14 w-14 rounded-full shadow-lg bg-secondary hover:bg-secondary-light text-secondary-foreground hover:scale-110 active:scale-95 transition-all"
         onClick={() => setIsAddDialogOpen(true)}
       >
         <Plus className="h-6 w-6" />

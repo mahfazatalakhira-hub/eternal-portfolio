@@ -174,4 +174,39 @@ All colors MUST be HSL.
     background-size: 200% 200%;
     animation: gradient-shift 3s ease infinite;
   }
+
+  /* تحسينات خاصة للموبايل */
+  @media (max-width: 640px) {
+    /* تقليل الحركة على الموبايل لتحسين الأداء */
+    @media (prefers-reduced-motion: no-preference) {
+      .animate-spin {
+        animation-duration: 2s;
+      }
+      
+      .animate-bounce {
+        animation-duration: 1.5s;
+      }
+    }
+
+    /* تحسين حجم النصوص */
+    h1 { font-size: 1.5rem !important; }
+    h2 { font-size: 1.25rem !important; }
+    h3 { font-size: 1.1rem !important; }
+
+    /* تحسين المسافات */
+    .space-y-6 > * + * { margin-top: 1rem !important; }
+    .gap-4 { gap: 0.75rem !important; }
+
+    /* تحسين الأزرار */
+    button {
+      touch-action: manipulation;
+    }
+  }
+
+  /* تحسين النقر على الموبايل */
+  @media (hover: none) {
+    .hover\:scale-105:active {
+      transform: scale(0.98);
+    }
+  }
 }
