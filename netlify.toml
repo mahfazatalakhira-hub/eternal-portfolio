@@ -1,16 +1,16 @@
 # Netlify Configuration for محفظة الآخرة
 
 [build]
-  # أمر البناء (Netlify يقوم بتثبيت التبعيات تلقائياً قبل البناء)
-  command = "npm ci && npm run build"
+  # أمر البناء (تثبيت devDependencies مطلوب لـ Vite)
+  command = "npm ci --include=dev && npm run build"
   
   # مجلد النشر
   publish = "dist"
   
   # متغيرات البيئة للبناء
   [build.environment]
-    NODE_VERSION = "18"
-    NPM_FLAGS = "--legacy-peer-deps"
+    NODE_VERSION = "20"
+    NPM_FLAGS = "--include=dev"
 
 # إعادة التوجيه للتعامل مع React Router
 [[redirects]]
@@ -49,17 +49,18 @@
 
 # إعدادات المعاينة
 [context.deploy-preview]
-  command = "npm ci && npm run build"
+  command = "npm ci --include=dev && npm run build"
 
 # إعدادات التطوير
 [context.branch-deploy]
-  command = "npm ci && npm run build"
+  command = "npm ci --include=dev && npm run build"
 
 # إعدادات الإنتاج
 [context.production]
-  command = "npm ci && npm run build"
+  command = "npm ci --include=dev && npm run build"
   
   # متغيرات البيئة للإنتاج
   [context.production.environment]
     NODE_ENV = "production"
+    NODE_VERSION = "20"
 
