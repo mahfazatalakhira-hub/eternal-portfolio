@@ -1,8 +1,8 @@
 # Netlify Configuration for محفظة الآخرة
 
 [build]
-  # أمر البناء
-  command = "npm run build"
+  # أمر البناء (Netlify يقوم بتثبيت التبعيات تلقائياً قبل البناء)
+  command = "npm ci && npm run build"
   
   # مجلد النشر
   publish = "dist"
@@ -10,6 +10,7 @@
   # متغيرات البيئة للبناء
   [build.environment]
     NODE_VERSION = "18"
+    NPM_FLAGS = "--legacy-peer-deps"
 
 # إعادة التوجيه للتعامل مع React Router
 [[redirects]]
@@ -48,15 +49,15 @@
 
 # إعدادات المعاينة
 [context.deploy-preview]
-  command = "npm run build"
+  command = "npm ci && npm run build"
 
 # إعدادات التطوير
 [context.branch-deploy]
-  command = "npm run build"
+  command = "npm ci && npm run build"
 
 # إعدادات الإنتاج
 [context.production]
-  command = "npm run build"
+  command = "npm ci && npm run build"
   
   # متغيرات البيئة للإنتاج
   [context.production.environment]
